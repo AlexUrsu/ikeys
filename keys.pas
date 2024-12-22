@@ -62,12 +62,13 @@ procedure gamego();
 var
 x:integer;
 begin
-  x:=Random(DataModule1.ADOQuery1.RecordCount)+1;
+  x:=Random(DataModule1.ADOQuery1.RecordCount)+1;   // выбираем случайную задачу из отсорированного списка
   DataModule1.ADOQuery1.RecNo:=x;
   x:=DataModule1.ADOQuery1.FieldValues['keys'];
-  DataModule1.ADOTable2.Locate('keys', x, []);
-  DataModule1.ADOTable1.Locate('nodename', 1, []); ////Нада проверить ищет ли правильно или в локате надо два аргумента указываеть еще на другую таблицу!!
- // DataModule1.ADOTable1.Locate(VarArrayOf(['nodename', 'keisname']), VarArrayOf([1, x]), []); ////Нада проверить ищет ли правильно или в локате надо два аргумента указываеть еще на другую таблицу!!
+  DataModule1.ADOTable2.Locate('keys', x, []); // находим эту задачу в табле 2
+  DataModule1.ADOTable1.Locate('keisname;nodenum', VarArrayOf([x,1]), []);
+  //DataModule1.ADOTable1.Locate('nodenum', 1, []); ////Нада проверить ищет ли правильно или в локате надо два аргумента указываеть еще на другую таблицу!!
+  //DataModule1.ADOTable1.Locate(VarArrayOf(['nodenum', 'keisname']), VarArrayOf([1, x]), []); ////Нада проверить ищет ли правильно или в локате надо два аргумента указываеть еще на другую таблицу!!
   Form4.Caption:=Form4.Caption+', '+DataModule1.ADOTable2.FieldValues['keisname'];
   Form4.Show;
   Form4.Button2.Click;
@@ -119,8 +120,8 @@ end;
 
 procedure TForm1.SpeedButton1Click(Sender: TObject);
 begin
-fsql('1');
-Form4.Caption:='Тема: '+SpeedButton1.Caption;
+fsql('1');   // выбираем все задачи с темой похожей на цифру 1 (тут косяк т.к. может быть и 11 и 21)
+Form4.Caption:='Тема: '+SpeedButton1.Caption; // зачемто сохраняем эту инфу
 gamego();
 
 end;
